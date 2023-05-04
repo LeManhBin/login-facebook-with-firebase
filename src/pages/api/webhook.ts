@@ -19,15 +19,15 @@ export default function userHandler(
       response = {
         text: `Bạn vừa nói là ${received_message.text}`,
       };
-      if (received_message.text == "Chào") {
-        response = {
-          text: `Chào bạn`,
-        };
-      } else if (received_message.text == "Hello") {
-        response = {
-          text: `Hello`,
-        };
-      }
+      // if (received_message.text == "Chào") {
+      //   response = {
+      //     text: `Chào bạn`,
+      //   };
+      // } else if (received_message.text == "Hello") {
+      //   response = {
+      //     text: `Hello`,
+      //   };
+      // }
     } else if (received_message.attachments) {
       // Get the URL of the message attachment
       let attachment_url = received_message.attachments[0].payload.url;
@@ -118,7 +118,7 @@ export default function userHandler(
       if (mode === "subscribe" && token === VERIFY_TOKEN) {
         // Respond with the challenge token from the request
         console.log("WEBHOOK_VERIFIED");
-        res.status(200).send(challenge);
+        res.status(200).json({challenge: challenge});
       } else {
         // Respond with '403 Forbidden' if verify tokens do not match
         res.status(403);
