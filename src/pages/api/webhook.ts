@@ -29,6 +29,8 @@ export default function userHandler(
   }
 
   const { query, method } = req
+  const id = parseInt(query.id as any, 10)
+  const name = query.name as any
   
   async function handleMessage(sender_psid:any, received_message:any) {
     let response;
