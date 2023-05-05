@@ -1,4 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { useState } from 'react';
+import axios from 'axios';
 import request from "request";
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
@@ -8,26 +10,35 @@ export default function userHandler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
+  const [result, setResult] = useState("")
+  const fetchData = async (payload:string) => {
+    const res =  await axios.post('https://bot.botlly.com/api/turbo', payload,
+    {
+      headers: {
+        'x-api-key' : "qkx8xfzhqQAn1KhJjfyNT3BlbkFy4" ,
+      },
+    })
+    if(res.status === 200) {
+      setResult(res.data.choices[0].message.content)
+    }else {
+      console.log("Error");
+      
+    }
+    
+    return res.data.choices[0].message.content
+  }
+
   const { query, method } = req
-  const id = parseInt(query.id as any, 10)
-  const name = query.name as any
-  function handleMessage(sender_psid:any, received_message:any) {
-    let response;
   
+  async function handleMessage(sender_psid:any, received_message:any) {
+    let response;
+    const prompt:string = received_message.text
+    await fetchData(prompt)
     // Checks if the message contains text
     if (received_message.text) {
       response = {
-        text: `Bạn vừa nói là ${received_message.text}`,
+        text: result,
       };
-      // if (received_message.text == "Chào") {
-      //   response = {
-      //     text: `Chào bạn`,
-      //   };
-      // } else if (received_message.text == "Hello") {
-      //   response = {
-      //     text: `Hello`,
-      //   };
-      // }
     } else if (received_message.attachments) {
       // Get the URL of the message attachment
       let attachment_url = received_message.attachments[0].payload.url;
