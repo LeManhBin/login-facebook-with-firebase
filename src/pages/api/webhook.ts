@@ -22,10 +22,7 @@ export default function userHandler(
       setResult(res.data.choices[0].message.content)
     }else {
       console.log("Error");
-      
     }
-    
-    return res.data.choices[0].message.content
   }
 
   const { query, method } = req
